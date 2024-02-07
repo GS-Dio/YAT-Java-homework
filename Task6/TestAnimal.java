@@ -17,17 +17,17 @@ public class TestAnimal {
         animal2.greeting();
         Animal animal3 = new BigDog();
         animal3.greeting();
-//        Animal animal4 = new Animal();
+//        Animal animal4 = new Animal(); // класс Animal абстрактный и поэтому нельзя создать его экземпляр
 
-//        // Downcast
-//        Dog dog2 = (Dog)animal2;
-//        BigDog bigDog2 = (BigDog)animal3;
-//        Dog dog3 = (Dog)animal3;
-//        Cat cat2 = (Cat)animal2;
-//        dog2.greeting(dog3);
-//        dog3.greeting(dog2);
-//        dog2.greeting(bigDog2);
-//        bigDog2.greeting(dog2);
-//        bigDog2.greeting(bigDog1);
+        // Downcast
+        Dog dog2 = (Dog)animal2;
+        BigDog bigDog2 = (BigDog)animal3;
+        Dog dog3 = (Dog)animal3;
+        Cat cat2 = (Cat)animal2; // animal12 объект является объектом Dog и поэтому привести его в тип Cat невозможно
+        dog2.greeting(dog3);
+        dog3.greeting(dog2);
+        dog2.greeting(bigDog2);
+        bigDog2.greeting(dog2);
+        bigDog2.greeting(bigDog1);
     }
 }
