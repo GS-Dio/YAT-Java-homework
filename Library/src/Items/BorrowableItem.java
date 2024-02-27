@@ -4,6 +4,7 @@ public interface BorrowableItem {
     //Одолжить предмет
     //Вернуть предмет
     //Можно ли его одолжить
-    void lendItem();
-    void returnItem();
+
+    void lendMyItem(String WhoTakeIt);
+    void returnMyItem(String WhoTakeIt);
 }

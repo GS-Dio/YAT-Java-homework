@@ -2,24 +2,29 @@ package Stage1;
 
 import Items.BorrowableItem;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-public class Member extends User {
-    private BorrowableItem[] BorrowableItem;
+public class Member extends User implements Serializable {
+    private List<BorrowableItem> borrowedItems;
     boolean isActive;
-
-    public Member(Items.BorrowableItem[] borrowableItem, boolean isActive) {
-        BorrowableItem = borrowableItem;
-        this.isActive = isActive;
-    }
 
     public Member(int id, String login, String password, String name,String surname,String patronymic) {
         super(id, login, password, name,surname,patronymic);
         this.isActive = true;
-    }
+        this.borrowedItems = new ArrayList<>();
 
-    public Items.BorrowableItem[] getBorrowableItem() {
-        return BorrowableItem;
+    }
+    public void showBorrowItem(){
+        System.out.println(getLogin()+ ":");
+        for (BorrowableItem borrowableItem: borrowedItems){
+            if (!borrowedItems.isEmpty()) {
+                System.out.println(borrowableItem);
+            }else
+                System.out.println("Пока ничего не одолжил.");
+        }
     }
 
     public void activate(){
@@ -29,8 +34,18 @@ public class Member extends User {
         isActive = false;
     }
 
-    public void setBorrowableItem(Items.BorrowableItem[] borrowableItem) {
-        BorrowableItem = borrowableItem;
+    public List<BorrowableItem> getBorrowedItems() {
+        return borrowedItems;
+    }
+    public BorrowableItem getOneBorrowedItem(int index){
+        return borrowedItems.get(index);
+    }
+    public void addBorrowableItem(BorrowableItem item) {
+        borrowedItems.add(item);
+    }
+
+    public void removeBorrowableItem(int index) {
+        borrowedItems.remove(index);
     }
 
     public boolean getIsActive() {
@@ -39,7 +54,7 @@ public class Member extends User {
 
     @Override
     public String toString() {
-        return "Member{"+ "Full name: " + getName()+ "Login: " + getLogin()  + "BorrowableItem=" + Arrays.toString(BorrowableItem) + ", isActive=" + isActive + "} ";
+        return  "Name: " + getName()  +"\nLogin: " + getLogin() + "\nОдолженных предметов:" + borrowedItems.size();
         //Имя
         //Логин
         //Заимствованные предметы

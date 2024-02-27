@@ -3,8 +3,9 @@ import Items.DVD;
 import Items.Magazin;
 import Stage1.Librarian;
 import Stage1.Member;
-import org.w3c.dom.ls.LSOutput;
 
+import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -14,62 +15,81 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Librarian Bob = new Librarian(1, "Bob@", "BobCool", "Bob", "Biba", "Boba", 2);
-        Librarian Alex = new Librarian(2, "Alex@", "AlexCool", "Alex", "Alex2", "Alex3", 1);
-        Librarian[] librarians = {Bob, Alex};
+            Library Library1 = deserializableLibrary();
 
-        Member Dave = new Member(11, "Dave@", "DaveCool", "Dave", "Dave2", "Dave3");
-        Member Masha = new Member(12, "Masha@", "MashaCool", "Masha", "Masha2", "Masha3");
-        Member Tayler = new Member(13, "Tayler@", "TaylerCool", "Tayler", "Tayler2", "Tayler3");
-        Member[] members = {Dave, Masha, Tayler};
+        int exit = 1;
+        while (exit == 1) {
+            System.out.println(ANSI_YELLOW + "Library Management System");
+            System.out.println("=========================" + ANSI_RESET);
+            System.out.println("Authorization User");
+            System.out.println();
+            System.out.println("Enter your login:");
+            String inputLogin = scanner.nextLine();
+            System.out.println("Enter your password:");
+            String inputPassword = scanner.nextLine();
 
-        Book book1 = new Book(1, "book1", true, "Tor", "Гром и молния", "1234567890");
-        Book book2 = new Book(2, "book2", true, "Flowe", "Великий барьер", "1234567890");
-        Book book3 = new Book(3, "book3", true, "Ram", "Оперативная память3", "1234567890");
-        Book book4 = new Book(4, "book4", true, "Po", "100 пельменей", "1234567890");
-        Book[] books = {book1, book2, book3, book4};
-
-        DVD dvd1 = new DVD(21, "В мире животных", true, 120);
-        DVD dvd2 = new DVD(22, "В мире животных2", true, 120);
-        DVD dvd3 = new DVD(23, "В мире животных3", true, 120);
-        DVD[] dvds = {dvd1, dvd2, dvd3};
-
-        Magazin magazin1 = new Magazin(31, "Кросворд", true, 111, "Belka");
-        Magazin magazin2 = new Magazin(32, "Научные новости", true, 112, "Lupa");
-        Magazin magazin3 = new Magazin(33, "Инженерная линейка", true, 113, "Molot");
-        Magazin[] magazins = {magazin1, magazin2, magazin3};
-
-        Library Library1 = new Library(librarians, members, books, dvds, magazins);
-
-
-        System.out.println(ANSI_YELLOW + "Library Management System");
-        System.out.println("=========================" + ANSI_RESET);
-        System.out.println("Authorization User");
-        System.out.println();
-        System.out.println("Enter your login:");
-        String inputLogin = scanner.nextLine();
-        System.out.println("Enter your password:");
-        String inputPassword = scanner.nextLine();
-
-        for (int i = 0; i < Library1.getMembers().length; i++) {
-            if (Library1.getMembers()[i].getLogin().equals(inputLogin)) {
-                if (Library1.getMembers()[i].getPassword().equals(inputPassword)) {
-                    MemberMenu(Library1);
-                } else if (Library1.getLibraries()[i].getLogin().equals(inputLogin)) {
+            for (int i = 0; i < Library1.getMembers().length; i++) {
+                if (Library1.getMembers()[i].getLogin().equals(inputLogin)) {
+                    if (Library1.getMembers()[i].getPassword().equals(inputPassword)) {
+                        MemberMenu(Library1, inputLogin);
+                    }
+                }
+            }
+            for (int i = 0; i < Library1.getLibraries().length; i++) {
+                if (Library1.getLibraries()[i].getLogin().equals(inputLogin)) {
                     if (Library1.getLibraries()[i].getPassword().equals(inputPassword)) {
                         LibrarianMenu(Library1);
                     }
-                } else
-                    System.out.println("There is no user with this username");
-
+                }
             }
-        }
 
+            System.out.println("Желаете продолжить: (1 - Yes, 0 - No)");
+            exit = scanner.nextInt();
+            scanner.nextLine();
+
+
+            serializableLibrary(Library1);
+
+
+        }
     }
 
-    public static void MemberMenu(Library library) {
+    private static void serializableLibrary(Library Library1) {
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("C:\\Users\\Thinkpad\\IdeaProjects\\Library\\src\\SaveProgress\\library1.ser");
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(Library1);
+            objectOutputStream.close();
+            System.out.println("Данные успешно сохранены!");
+        }catch (FileNotFoundException e){
+            System.out.println("Не удалось сохранить файл.");
+        }catch (IOException e){
+            System.out.println("Не удалось сохранить файл..");
+        }
+    }
+
+    private static Library deserializableLibrary(){
+        try{
+            FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Thinkpad\\IdeaProjects\\Library\\src\\SaveProgress\\library1.ser");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            return (Library) objectInputStream.readObject();
+
+        }catch (FileNotFoundException e){
+            System.out.println("Не удалось загрузить файл.");
+        }catch (IOException e){
+            System.out.println("Не удалось загрузить файл..");
+        }catch (ClassNotFoundException e){
+            System.out.println("Не удалось загрузить файл...");
+        }
+        return null;
+    }
+
+    public static void MemberMenu(Library library, String memberLogin) {
         int exit;
         do {
+            System.out.println();
             System.out.println(ANSI_YELLOW + "Member Menu:");
             System.out.println("=========================" + ANSI_RESET);
 
@@ -81,24 +101,60 @@ public class Main {
             System.out.println("6. Return Item"); // Верните элемент
             System.out.println("7. Logout"); //Выйдите из системы
 
-            int inputCommand = scanner.nextInt();
+            int inputCommand = getInputNumber(scanner);
             exit = inputCommand;
 
             switch (inputCommand) {
-                case 1 -> library.ListItems();
+                case 1 -> {
+                    System.out.println(ANSI_YELLOW + "List Items:");
+                    System.out.println("=========================" + ANSI_RESET);
+                    library.ListItems();
+                }
                 case 2 -> {
+                    System.out.println(ANSI_YELLOW + "Borrow Item:");
+                    System.out.println("=========================" + ANSI_RESET);
                     System.out.println("Какой передмет?");
                     library.ListItems();
-                    int inputIndex = scanner.nextInt();
-                    library.lendBook(inputIndex);
+                    int inputIndex = getInputNumber(scanner) - 1;
+                    library.lendItem(inputIndex, memberLogin);
                     System.out.println();
                 }
-                case 3 -> System.out.println("Результат2");
-                case 4 -> System.out.println("Результат3");
-                case 5 -> System.out.println("Результат");
-                case 6 -> System.out.println("Результат");
-                case 7 -> System.out.println("До свидания");
-                default -> System.out.println("Результат");
+                case 3 -> {
+                    System.out.println("Какие предметы вы хотите посмотреть: \n1. Books\n2. DVDs\n3. Magazins");
+                    int input = getInputNumber(scanner);
+                    switch (input) {
+                        case 1 -> library.ListBooks();
+                        case 2 -> library.ListDvds();
+                        case 3 -> library.ListMagazins();
+                        default -> System.out.println();
+                    }
+
+                    System.out.println();
+                }
+                case 4 -> {
+                    System.out.println(ANSI_YELLOW + " List borrowed Items:");
+                    System.out.println("=========================" + ANSI_RESET);
+                    library.showItems(memberLogin);
+
+                }
+                case 5 -> {
+                    System.out.println(ANSI_YELLOW + "Member info:");
+                    System.out.println("=========================" + ANSI_RESET);
+                    library.memberInfo(memberLogin);
+                }
+                case 6 -> {
+                    System.out.println("Какой передмет вы хотите вернуть?");
+                    library.showItems(memberLogin);
+                    int inputIndex = getInputNumber(scanner) - 1;
+                    library.returnItem(inputIndex, memberLogin);
+                    System.out.println();
+                    System.out.println("Вы успешно вернули передмет!");
+                }
+                case 7 -> System.out.println("До свидания!!!");
+                default -> {
+                    System.out.println("Результат");
+                    return;
+                }
             }
         } while (exit != 7);
 
@@ -111,28 +167,68 @@ public class Main {
             System.out.println("=========================" + ANSI_RESET);
 
             System.out.println("1. List Items");
-            System.out.println("2. Borrow Item");
-            System.out.println("3. Search Items by type");
-            System.out.println("4. List borrowed Items");
-            System.out.println("5. Get profile info");
-            System.out.println("6. Return Item");
+            System.out.println("2. Get Profile Info");
+            System.out.println("3. List Users");
+            System.out.println("4. Deactivate/Activate User");
+            System.out.println("5. List Borrowed Items");
+            System.out.println("6. Search Items by Type");
             System.out.println("7. Logout");
 
-            int inputCommand = scanner.nextInt();
+            int inputCommand = getInputNumber(scanner);
             exit = inputCommand;
 
             switch (inputCommand) {
                 case 1 -> library.ListItems();
-                case 2 -> System.out.println("Результат");
-                case 3 -> System.out.println("Результат2");
-                case 4 -> System.out.println("Результат3");
-                case 5 -> System.out.println("Результат");
-                case 6 -> System.out.println("Результат");
+                case 2 -> library.infoOfMembers();
+                case 3 -> library.listAllMembers();
+                case 4 -> {
+                    System.out.println("Вы хотите \n1.Активировать пользователя\n2.Деактивизировать пользователя");
+                    int input = getInputNumber(scanner);
+                    switch (input) {
+                        case 1 -> {
+                            System.out.println("Какова пользователя:");
+                            library.listDeActivMembers();
+                            int indexMember = getInputNumber(scanner)- 1;
+                            System.out.println("Пользователь актевирован");
+                            library.activateMember(indexMember);
+                        }
+                        case 2 -> {
+                            System.out.println("Какова пользователя:");
+                            library.listActivMembers();
+                            int indexMember = getInputNumber(scanner) - 1;
+                            library.deActivateMember(indexMember);
+                        }
+                    }
+                }
+                case 5 -> library.listBorrowItem();
+                case 6 -> {
+                    System.out.println("Какие предметы вы хотите посмотреть: \n1. Books\n2. DVDs\n3. Magazins");
+                    int input = getInputNumber(scanner);
+                    switch (input) {
+                        case 1 -> library.ListBooks();
+                        case 2 -> library.ListDvds();
+                        case 3 -> library.ListMagazins();
+                        default -> System.out.println();
+                    }
+                    System.out.println();}
+
                 case 7 -> System.out.println("До свидания");
                 default -> System.out.println("Результат");
             }
         } while (exit != 7);
+    }
 
+    public static int getInputNumber(Scanner scanner) {
+        while (true) {
+            if (scanner.hasNextInt()) {
+                int inputCommand = scanner.nextInt();
+                scanner.nextLine();
+                return inputCommand;
+            } else {
+                System.out.println("Ошибка ввода, повторите попытку");
+                scanner.nextLine();
+            }
+        }
     }
 
 }

@@ -1,12 +1,15 @@
 package Items;
 
-public class Magazin extends libraryItem implements BorrowableItem,PaperItem {
+import java.io.Serializable;
+
+public class Magazin extends libraryItem implements BorrowableItem, PaperItem, Serializable {
 
 
     private long issueNumber;
     private String issuer;
+    private String WhoTakeIt;
 
-    public Magazin(){
+    public Magazin() {
         super();
         this.issueNumber = 0;
         this.issuer = "null";
@@ -17,9 +20,11 @@ public class Magazin extends libraryItem implements BorrowableItem,PaperItem {
         this.issueNumber = issueNumber;
         this.issuer = issuer;
     }
-    public void displayDetails(){
+
+    public void displayDetails() {
         System.out.println("Id =" + getId() + ", name" + getName() + ", IsAvailable" + getIsAvailable());
     }
+
     @Override
     public void addBookmark(int page) {
         System.out.println("Закладка добавлена на стр" + page);
@@ -31,7 +36,7 @@ public class Magazin extends libraryItem implements BorrowableItem,PaperItem {
     }
 
     @Override
-    public void WriteNote(int page,String note) {
+    public void WriteNote(int page, String note) {
         System.out.println("Заметка \"" + note + "\" добавлена на стр" + page);
     }
 
@@ -39,14 +44,24 @@ public class Magazin extends libraryItem implements BorrowableItem,PaperItem {
     public void EraseNote(int page) {
         System.out.println("Заметка удалена со стр" + page);
     }
+
     @Override
-    public void lendItem() {
+    public void lendMyItem(String WhoTakeIt) {
         super.setAvailable(false);
+        this.WhoTakeIt = WhoTakeIt;
     }
 
     @Override
-    public void returnItem() {
+    public void returnMyItem(String WhoTakeIt) {
         super.setAvailable(true);
+    }
+
+    public String getWhoTakeIt() {
+        return WhoTakeIt;
+    }
+
+    public void setWhoTakeIt(String whoTakeIt) {
+        WhoTakeIt = whoTakeIt;
     }
 
     public long getIssueNumber() {
@@ -63,5 +78,13 @@ public class Magazin extends libraryItem implements BorrowableItem,PaperItem {
 
     public void setIssuer(String issuer) {
         this.issuer = issuer;
+    }
+
+    @Override
+    public String toString() {
+        return "Magazin[" +
+                "issueNumber=" + issueNumber +
+                ", issuer='" + issuer + '\'' +
+                ']';
     }
 }

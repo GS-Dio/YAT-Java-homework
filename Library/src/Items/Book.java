@@ -1,8 +1,9 @@
 package Items;
 
-import java.sql.SQLOutput;
 
-public class Book extends libraryItem implements PaperItem, BorrowableItem {
+import java.io.Serializable;
+
+public class Book extends libraryItem implements PaperItem, BorrowableItem, Serializable {
 
     private String author;
     private String title;
@@ -45,20 +46,15 @@ public class Book extends libraryItem implements PaperItem, BorrowableItem {
     }
 
     @Override
-    public void lendItem(String WhoTakeIt) {
-        if (getIsAvailable()) {
+    public void lendMyItem(String WhoTakeIt) {
             super.setAvailable(false);
             this.WhoTakeIt = WhoTakeIt;
-        } else
-            System.out.println("This book is not available");
     }
 
     @Override
-    public void returnItem() {
-        if (!getIsAvailable()) {
+    public void returnMyItem(String WhoTakeIt) {
+        if (!getIsAvailable() && WhoTakeIt.equals(this.WhoTakeIt)) {
             super.setAvailable(true);
-        } else {
-            System.out.println("This book is already in the library");
         }
     }
 

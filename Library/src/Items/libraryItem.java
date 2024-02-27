@@ -1,6 +1,8 @@
 package Items;
 
-public abstract class libraryItem {
+import java.io.Serializable;
+
+public abstract class libraryItem implements Serializable {
     private int id;
     private String name;
     private boolean isAvailable;
