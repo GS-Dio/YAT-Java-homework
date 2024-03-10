@@ -15,6 +15,34 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+//            Librarian Bob = new Librarian(1, "Bob", "BobCool", "Bob", "Biba", "Boba", 2);
+//            Librarian Alex = new Librarian(2, "Alex", "AlexCool", "Alex", "Alex2", "Alex3", 1);
+//            Librarian[] librarians = {Bob, Alex};
+//
+//            Member Dave = new Member(11, "Dave", "DaveCool", "Dave", "David", "Daveson");
+//            Member Masha = new Member(12, "Masha", "MashaCool", "Masha", "Sorocova", "Sergevna");
+//            Member Tayler = new Member(13, "Tayler", "TaylerCool", "Tayler", "Derden", "*Secret*");
+//            Member[] members = {Dave, Masha, Tayler};
+//
+//            Book book1 = new Book(1, "book1", true, "Tor", "Гром и молния", "1234567890");
+//            Book book2 = new Book(2, "book2", true, "Flowe", "Великий барьер", "1234567890");
+//            Book book3 = new Book(3, "book3", true, "Ram", "Оперативная память3", "1234567890");
+//            Book book4 = new Book(4, "book4", true, "Po", "100 пельменей", "1234567890");
+//            Book[] books = {book1, book2, book3, book4};
+//
+//            DVD dvd1 = new DVD(21, "В мире животных", true, 120);
+//            DVD dvd2 = new DVD(22, "В мире животных2", true, 120);
+//            DVD dvd3 = new DVD(23, "В мире животных3", true, 120);
+//            DVD[] dvds = {dvd1, dvd2, dvd3};
+//
+//            Magazin magazin1 = new Magazin(31, "Кроссворд", true, 111, "Belka");
+//            Magazin magazin2 = new Magazin(32, "Научные новости", true, 112, "Lupa");
+//            Magazin magazin3 = new Magazin(33, "Инженерная линейка", true, 113, "Molot");
+//        Magazin[] magazins = {magazin1, magazin2, magazin3};
+//
+//   Library Library1 = new Library(librarians, members, books, dvds, magazins);
+
             Library Library1 = deserializableLibrary();
 
         int exit = 1;
@@ -35,7 +63,7 @@ public class Main {
                     }
                 }
             }
-            for (int i = 0; i < Library1.getLibraries().length; i++) {
+            for (int i = 0; i <Library1.getLibraries().length; i++) {
                 if (Library1.getLibraries()[i].getLogin().equals(inputLogin)) {
                     if (Library1.getLibraries()[i].getPassword().equals(inputPassword)) {
                         LibrarianMenu(Library1);
@@ -47,44 +75,37 @@ public class Main {
             exit = scanner.nextInt();
             scanner.nextLine();
 
-
             serializableLibrary(Library1);
-
-
         }
     }
 
     private static void serializableLibrary(Library Library1) {
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream("C:\\Users\\Thinkpad\\IdeaProjects\\Library\\src\\SaveProgress\\library1.ser");
+            String filePath = "library1.ser";
+            FileOutputStream fileOutputStream = new FileOutputStream(filePath);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
             objectOutputStream.writeObject(Library1);
             objectOutputStream.close();
             System.out.println("Данные успешно сохранены!");
-        }catch (FileNotFoundException e){
-            System.out.println("Не удалось сохранить файл.");
-        }catch (IOException e){
-            System.out.println("Не удалось сохранить файл..");
+        } catch (IOException e) {
+            System.out.println("Не удалось сохранить файл: " + e.getMessage());
         }
     }
 
-    private static Library deserializableLibrary(){
-        try{
-            FileInputStream fileInputStream = new FileInputStream("C:\\Users\\Thinkpad\\IdeaProjects\\Library\\src\\SaveProgress\\library1.ser");
+    private static Library deserializableLibrary() {
+        try {
+            String filePath = "library1.ser";
+            FileInputStream fileInputStream = new FileInputStream(filePath);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
             return (Library) objectInputStream.readObject();
-
-        }catch (FileNotFoundException e){
-            System.out.println("Не удалось загрузить файл.");
-        }catch (IOException e){
-            System.out.println("Не удалось загрузить файл..");
-        }catch (ClassNotFoundException e){
-            System.out.println("Не удалось загрузить файл...");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Не удалось загрузить файл: " + e.getMessage());
         }
         return null;
     }
+
 
     public static void MemberMenu(Library library, String memberLogin) {
         int exit;
@@ -94,7 +115,7 @@ public class Main {
             System.out.println("=========================" + ANSI_RESET);
 
             System.out.println("1. List Items");  // Перечислить все пердметы
-            System.out.println("2. Borrow Item");  // Одожить пердмет
+            System.out.println("2. Borrow Item");  // одожить перемет
             System.out.println("3. Search Items by type");  // Выполните поиск элементов по типу
             System.out.println("4. List borrowed Items"); // Перечислите заимствованные элементы
             System.out.println("5. Get profile info"); // Получите информацию о профиле

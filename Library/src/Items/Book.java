@@ -8,7 +8,7 @@ public class Book extends libraryItem implements PaperItem, BorrowableItem, Seri
     private String author;
     private String title;
     private String isbn; //Штих код
-    private String WhoTakeIt;
+    private String whoTakeIt;
 
     public Book() {
         super();
@@ -36,34 +36,34 @@ public class Book extends libraryItem implements PaperItem, BorrowableItem, Seri
     }
 
     @Override
-    public void WriteNote(int page, String note) {
+    public void writeNote(int page, String note) {
         System.out.println("Заметка \"" + note + "\" добавлена на стр" + page);
     }
 
     @Override
-    public void EraseNote(int page) {
+    public void eraseNote(int page) {
         System.out.println("Заметка удалена со стр" + page);
     }
 
     @Override
     public void lendMyItem(String WhoTakeIt) {
             super.setAvailable(false);
-            this.WhoTakeIt = WhoTakeIt;
+            this.whoTakeIt = WhoTakeIt;
     }
 
     @Override
     public void returnMyItem(String WhoTakeIt) {
-        if (!getIsAvailable() && WhoTakeIt.equals(this.WhoTakeIt)) {
+        if (!getIsAvailable() && WhoTakeIt.equals(this.whoTakeIt)) {
             super.setAvailable(true);
         }
     }
 
     public String getWhoTakeIt() {
-        return WhoTakeIt;
+        return whoTakeIt;
     }
 
     public void setWhoTakeIt(String whoTakeIt) {
-        WhoTakeIt = whoTakeIt;
+        this.whoTakeIt = whoTakeIt;
     }
 
     public String getAuthor() {

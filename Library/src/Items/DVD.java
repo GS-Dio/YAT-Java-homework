@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class DVD extends libraryItem implements BorrowableItem, Serializable {
     private int runTime;
-    private String WhoTakeIt;
+    private String whoTakeIt;
 
     public DVD(int runTime) {
         this.runTime = runTime;
@@ -17,7 +17,7 @@ public class DVD extends libraryItem implements BorrowableItem, Serializable {
 
     public void lendMyItem(String WhoTakeIt) {
         super.setAvailable(false);
-        this.WhoTakeIt = WhoTakeIt;
+        this.whoTakeIt = WhoTakeIt;
     }
 
     @Override
@@ -39,11 +39,11 @@ public class DVD extends libraryItem implements BorrowableItem, Serializable {
     }
 
     public String getWhoTakeIt() {
-        return WhoTakeIt;
+        return whoTakeIt;
     }
 
     public void setWhoTakeIt(String whoTakeIt) {
-        WhoTakeIt = whoTakeIt;
+        this.whoTakeIt = whoTakeIt;
     }
 
     @Override

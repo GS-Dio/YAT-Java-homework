@@ -7,7 +7,7 @@ public class Magazin extends libraryItem implements BorrowableItem, PaperItem, S
 
     private long issueNumber;
     private String issuer;
-    private String WhoTakeIt;
+    private String whoTakeIt;
 
     public Magazin() {
         super();
@@ -36,19 +36,19 @@ public class Magazin extends libraryItem implements BorrowableItem, PaperItem, S
     }
 
     @Override
-    public void WriteNote(int page, String note) {
+    public void writeNote(int page, String note) {
         System.out.println("Заметка \"" + note + "\" добавлена на стр" + page);
     }
 
     @Override
-    public void EraseNote(int page) {
+    public void eraseNote(int page) {
         System.out.println("Заметка удалена со стр" + page);
     }
 
     @Override
     public void lendMyItem(String WhoTakeIt) {
         super.setAvailable(false);
-        this.WhoTakeIt = WhoTakeIt;
+        this.whoTakeIt = WhoTakeIt;
     }
 
     @Override
@@ -57,11 +57,11 @@ public class Magazin extends libraryItem implements BorrowableItem, PaperItem, S
     }
 
     public String getWhoTakeIt() {
-        return WhoTakeIt;
+        return whoTakeIt;
     }
 
     public void setWhoTakeIt(String whoTakeIt) {
-        WhoTakeIt = whoTakeIt;
+        this.whoTakeIt = whoTakeIt;
     }
 
     public long getIssueNumber() {
